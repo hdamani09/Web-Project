@@ -1,23 +1,53 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Home | DigiVault</title>
+    <title>DigiVault</title>
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/clean.css">
+    <script src="js/index.js"></script>
+    <?php
+      if(isset($_SESSION['u_id'])){
+        echo "<link rel='stylesheet' type='text/css' href='css/home.css'>";
+      } else {
+        echo "<link rel='stylesheet' type='text/css' href='css/index.css'>";
+      }
+    ?>
+    <link rel="stylesheet" type='text/css' href="css/animate.css" />
+    <script src="js/jquery.min.js"></script>
     <script>
     $(document).ready(function(){
+      $("#n3").click(function(){
+          $(".user-mainbody").css({display: 'none'});
+          $(".user-files").css({display: 'none'});
+          $(".user-contact").fadeIn(700);
+
+      });
+      $("#n1").click(function(){
+          $(".user-contact").css({display: 'none'});
+          $(".user-files").css({display: 'none'});
+          $(".user-mainbody").fadeIn(700);
+      });
+      $("#n2").click(function(){
+          $(".user-contact").css({display: 'none'});
+          $(".user-mainbody").css({display: 'none'});
+          $(".user-files").fadeIn(700);
+      });
         $("#get-started").click(function(){
-            $(".about-container").hide();
-            $(".form-container").slideDown(900);
+            $(this).css({background:'rgba(30,30,30,0.5)'});
+            $("#about-us").css({background:''});
+            $("#wrapper").hide();
+            $(".form-container").show();
         });
         $("#about-us").click(function(){
+          $(this).css({background:'rgba(30,30,30,0.5)'});
+          $("#get-started").css({background:''});
             $(".form-container").hide();
-            $(".about-container").slideDown(600);  
+            $("#wrapper").show();
         });
         $("#form-close").click(function(){
-            $(".form-container").slideUp(700);
+            $(".form-container").hide(500);
         });
         $("#to-login").click(function(){
             $(".signup-container").css({display: 'none'});
@@ -30,57 +60,33 @@
     });
     </script>
   </head>
-
   <body>
-  <nav>
-    <ul>
-      <li id="about-us">About US</li>
-      <li id="get-started">Get Started</li>
-    </ul>
-  </nav>
-  <header>
-    <div class="main-brand">
-      <h2>&nbsp;<span style="color:#ccc">D</span>igiV<span style="color:#ccc"><i class="fa fa-lock" aria-hidden="true"></i></span>ult</h2>
-    </div>
-  </header>
-  <div class="main-wrapper">
-    <div class="body-wrapper">
-
-    </div>
-    <div class="about-container" style="display:none">
-
-    </div>
-
-    <div class="form-container" style="display:none">
-      <p id="form-close" style="color:white">&#10006;</p>
-      <div class="signup-container">
-        <p class="form-header" style="color:white">Register</p>
-        <form id="signup-form">
-          <input type="text" name="first" placeholder="First Name">
-          <input type="text" name="last" placeholder="Last Name">
-          <input id="signup-email"type="email" name="email" placeholder="Email">
-          <input type="text" name="uid" placeholder="Username">
-          <div id="signup-gender">
-            <input type="radio" name="gender" value="male" id="male-box"style="display:none"><label id="male-label" for="male-box">Male</label>
-            <input type="radio" name="gender" value="female" id="female-box"style="display:none"><label id="female-label" for="female-box">Female</label>
-          </div>
-          <input type="password" name="password" placeholder="Password">
-          <input type="password" name="password2" placeholder="Retype-Password">
-          <button type="submit" class="form-button" name="signup">Sign Up!</button>
-          <span id="to-login" style="padding-top:1.13em">Already Registered?</span>
-        </form>
+    <header>
+      <div class="main-brand">
+        <h2>&nbsp;DigiV<i class="fa fa-lock" aria-hidden="true" style="color:#101010"></i>ult</h2>
       </div>
-      <div class="signin-container">
-        <p class="form-header" style="color:white">Login</p>
-        <form id="signin-form">
-          <input type="text" name="username" placeholder="Username">
-          <input type="password" name="password" placeholder="Password">
-          <button type="submit" class="form-button" name="signin">Sign In!</button>
-          <span id="to-register" style="padding-top:1.13em">Are you new?</span>
-        </form>
-      </div>
-    </div>
-  </div>
+    </header>
+        <?php
+          if(!isset($_SESSION['u_id'])){
+            echo "
+              <nav id='index-nav'>
+              <ul>
+                <li id='about-us'>About Us</li>
+                <li id='get-started'>Get Started</li>
+              </ul>
+            </nav>
+            ";
+          }
+        ?>
 
+    <div class="main-wrapper">
+      <?php
+        if(!isset($_SESSION['u_id'])){
+          include_once 'include/home.php';
+        } else{
+          include_once 'include/user.php';
+        }
+       ?>
+    </div>
   </body>
 </html>
